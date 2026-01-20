@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>All In Capone Club — учёт турнира</title>
+  <title>Учёт турнира — автономный файл</title>
   <style>
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
@@ -33,389 +33,288 @@
         radial-gradient(ellipse at bottom, rgba(255,196,0,.05), transparent 55%),
         var(--bg);
       color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family:"PT Sans", "Trebuchet MS", sans-serif;
     }
 
     .container{
-      max-width:1200px;
+      max-width:1280px;
       margin:0 auto;
-      padding:18px 18px 40px;
+      padding:24px 18px 36px;
     }
 
-    /* Top bar (mascot + club name left, title center/right) */
-    .topbar{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:10px 0 14px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-    .mascotWrap{
-      width:54px;
-      height:54px;
-      border-radius:14px;
-      border:1px solid rgba(255,196,0,.35);
-      background:rgba(255,196,0,.06);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      flex:0 0 auto;
-      box-shadow:0 0 20px rgba(255,196,0,.08);
-    }
-    .mascotWrap img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .brandText{
-      min-width:0;
-      line-height:1.1;
-    }
-    .clubName{
-      font-weight:900;
-      letter-spacing:.2px;
-      color:var(--gold);
-      font-size:16px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .clubSub{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:4px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .headerRight{
-      margin-left:auto;
-      min-width:0;
-      text-align:right;
-    }
-    .headerRight h1{
-      margin:0 0 6px;
-      font-size:clamp(18px,2.2vw,28px);
-      font-weight:900;
-      color:var(--gold);
-      letter-spacing:.3px;
-    }
-    .headerRight .sub{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.35;
-    }
-
-    .divider{
-      height:1px;
-      background:rgba(255,196,0,.55);
-      box-shadow:0 0 18px rgba(255,196,0,.18);
-      margin:6px 0 0;
-    }
-
-    /* MAIN LAYOUT — hard anti-overlap */
     .mainGrid{
       display:grid;
-      grid-template-columns: minmax(360px, 480px) minmax(0, 1fr);
+      grid-template-columns: 420px minmax(0, 1fr);
       gap:var(--gap);
       align-items:start;
-      margin-top:18px;
-      width:100%;
     }
+
     .leftCol,.rightCol{ width:100%; min-width:0; }
-    /* critical: prevent content from forcing grid item min-width:auto */
     .rightCol{ min-width:0; }
 
-    @media (max-width:1000px){
-      .topbar{ flex-wrap:wrap; }
-      .headerRight{ text-align:left; margin-left:0; width:100%; }
-      .mainGrid{ grid-template-columns:1fr; }
-    }
-
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 35%), var(--card);
+      background:var(--card);
       border:1px solid var(--border);
       border-radius:var(--radius);
+      padding:18px;
       box-shadow:var(--shadow);
-      padding:16px;
-      min-width:0; /* critical */
+      margin-bottom:var(--gap);
     }
-    .card + .card{ margin-top:14px; }
 
     .cardTitle{
-      color:var(--gold);
-      font-weight:900;
-      letter-spacing:.2px;
-      margin:0 0 12px;
+      margin:0 0 14px 0;
       font-size:18px;
+      letter-spacing:.4px;
+      color:var(--gold);
     }
 
     .row{
-      display:flex;
+      display:grid;
+      grid-template-columns:1fr 1fr;
       gap:12px;
       align-items:end;
-      flex-wrap:wrap;
-      min-width:0;
     }
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:0 0 6px;
-      letter-spacing:.2px;
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
-    input[type="text"],input[type="number"],select{
-      width:100%;
-      height:42px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid #2d2d2d;
-      background:#1b1b1b;
+
+    label{ font-size:12px; color:var(--muted); }
+
+    input, select, textarea{
+      background:var(--card2);
+      border:1px solid var(--border);
       color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
       outline:none;
-      min-width:0;
-    }
-    input::placeholder{ color:#7f7f7f; }
-    .field{ flex:1 1 180px; min-width:160px; }
-    .field.small{ flex:0 0 170px; }
-
-    .explain{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.35;
     }
 
-    /* Buttons */
+    input:focus, select:focus, textarea:focus{ border-color:var(--gold); }
+
     .btn{
       height:var(--btnH);
+      padding:0 16px;
       border-radius:12px;
       border:1px solid transparent;
-      padding:0 14px;
-      font-weight:900;
+      font-weight:700;
       letter-spacing:.2px;
       cursor:pointer;
-      user-select:none;
-      transition:.15s ease;
+      transition:transform .05s ease, box-shadow .2s ease, background .2s ease, border .2s ease;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:8px;
+      user-select:none;
+      text-align:center;
       white-space:nowrap;
     }
-    .btn:disabled{ opacity:.45; cursor:not-allowed; }
-    .btnPrimary{ background:var(--gold); color:#111; border-color:rgba(255,196,0,.9); }
+
+    .btnPrimary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 8px 18px rgba(255,196,0,.22);
+    }
+
     .btnPrimary:hover{ background:var(--gold2); }
-    .btnSecondary{ background:transparent; color:var(--gold); border-color:rgba(255,196,0,.85); }
-    .btnSecondary:hover{ background:rgba(255,196,0,.08); }
-    .btnDanger{ background:var(--danger); color:#fff; border-color:rgba(255,255,255,.08); }
+
+    .btnSecondary{
+      background:transparent;
+      color:var(--gold);
+      border-color:var(--gold);
+    }
+
+    .btnSecondary:hover{
+      background:rgba(255,196,0,.12);
+      box-shadow:0 8px 18px rgba(255,196,0,.12);
+    }
+
+    .btnDanger{
+      background:var(--danger);
+      color:#ffd7d7;
+      border-color:var(--danger2);
+    }
+
     .btnDanger:hover{ background:var(--danger2); }
-    .btnWide{ width:100%; }
+
+    .btn[disabled]{ opacity:.5; cursor:not-allowed; box-shadow:none; }
 
     .btnGrid2{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:12px;
+      gap:10px;
       margin-top:12px;
     }
-    @media (max-width:520px){
-      .btnGrid2{ grid-template-columns:1fr; }
+
+    .btnGrid1{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin-top:12px;
     }
 
-    /* Stats */
+    .explain{
+      margin-top:12px;
+      padding:12px;
+      border-radius:12px;
+      background:rgba(255,196,0,.07);
+      border:1px dashed rgba(255,196,0,.3);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+
     .statsGrid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
     }
-    @media (max-width:520px){
-      .statsGrid{ grid-template-columns:1fr; }
-    }
-    .stat{
-      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 40%), var(--card2);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px;
-      min-height:74px;
-      min-width:0;
-    }
-    .stat .val{ font-size:20px; font-weight:900; color:var(--gold); margin-bottom:4px; }
-    .stat .lbl{ font-size:12px; color:var(--muted); }
 
-    /* Table wrapper — critical for no overlap */
-    .tableCard{ padding:12px 12px 10px; }
+    .stat{
+      background:var(--card2);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .stat .val{ font-size:22px; font-weight:800; color:var(--gold); }
+    .stat .lbl{ font-size:12px; color:var(--muted); margin-top:4px; }
+
     .tableWrap{
       width:100%;
-      overflow-x:auto;    /* critical */
-      overflow-y:hidden;
-      min-width:0;        /* critical */
+      overflow:auto;
       border-radius:14px;
       border:1px solid var(--border);
-      background:#0f0f0f;
+      background:var(--card2);
     }
+
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:720px;    /* forces internal scroll instead of breaking layout */
+      min-width:700px;
     }
-    .entriesTable table{ min-width:520px; }
 
-    thead th{
-      background:var(--gold);
-      color:#111;
-      font-weight:900;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.6px;
-      padding:10px;
-      border-bottom:1px solid rgba(0,0,0,.25);
-    }
-    tbody td{
-      padding:10px;
-      border-bottom:1px solid rgba(255,255,255,.06);
+    th, td{
+      padding:10px 12px;
+      text-align:left;
       font-size:13px;
-      color:var(--text);
-      background:var(--row);
-      vertical-align:top;
-    }
-    tbody tr:nth-child(even) td{ background:var(--row2); }
-    tbody tr:hover td{ background:rgba(255,196,0,.08); }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
+      border-bottom:1px solid #1f1f1f;
       white-space:nowrap;
     }
-    .pillCome{ background:rgba(16,34,20,.65); border-color:rgba(60,170,90,.18); }
-    .pillPaid{ background:rgba(17,51,31,.75); border-color:rgba(60,170,90,.22); }
-    .pillOut{ opacity:.92; }
+
+    th{
+      background:rgba(255,196,0,.14);
+      color:var(--gold);
+      font-weight:800;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+
+    tbody tr:nth-child(odd){ background:var(--row); }
+    tbody tr:nth-child(even){ background:var(--row2); }
+    tbody tr:hover{ background:#1a1a1a; }
+
+    .pill{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid #333;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .pillCome{ border-color:#665200; color:#e8c447; }
+    .pillPaid{ border-color:#1d6a3b; color:#63d293; }
+    .pillOut{ border-color:#6a1d1d; color:#f3a6a6; }
+
+    .outRow{ opacity:.55; }
 
     .actionsRow{
       display:flex;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
-      margin:10px 0 14px;
+      align-items:center;
     }
-    .actionsRow .btn{ flex:1 1 240px; }
 
-    /* Player row controls */
-    .koInput{
-      width:72px;
-      height:34px;
-      border-radius:10px;
-      border:1px solid #2d2d2d;
-      background:#1b1b1b;
-      color:var(--text);
-      padding:6px 8px;
+    .miniBtns{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
     }
-    .miniBtns{ display:flex; gap:8px; flex-wrap:wrap; }
+
     .miniBtn{
-      height:30px;
+      height:32px;
       padding:0 10px;
       border-radius:10px;
-      font-weight:900;
-      font-size:12px;
-      border:1px solid rgba(255,196,0,.8);
-      color:var(--gold);
+      border:1px solid var(--gold);
       background:transparent;
-      cursor:pointer;
-      transition:.12s ease;
-      white-space:nowrap;
-    }
-    .miniBtn:hover{ background:rgba(255,196,0,.10); }
-    .miniBtnDanger{
-      border-color:rgba(255,255,255,.10);
-      background:rgba(255,255,255,.06);
-      color:#eee;
-    }
-    .miniBtnDanger:hover{ background:rgba(255,255,255,.10); }
-
-    .outRow td{ opacity:.86; }
-    .footer{
-      text-align:center;
-      color:#8b8b8b;
+      color:var(--gold);
       font-size:12px;
-      margin-top:18px;
+      cursor:pointer;
     }
 
-    /* Modal */
+    .miniBtn:hover{ background:rgba(255,196,0,.12); }
+
+    .miniBtnDanger{
+      border-color:#a33;
+      color:#f3a6a6;
+    }
+
+    .miniBtnDanger:hover{ background:rgba(163,51,51,.22); }
+
+    .koInput{
+      width:70px;
+      text-align:center;
+    }
+
+    .hintSmall{ color:var(--muted); font-size:12px; margin-top:8px; }
+
+    /* Bulk modal */
     .modalOverlay{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.7);
+      background:rgba(0,0,0,.6);
       display:none;
       align-items:center;
       justify-content:center;
-      padding:18px;
+      padding:20px;
       z-index:50;
     }
     .modal{
-      width:min(920px, 100%);
-      background:#0f0f0f;
+      background:var(--card);
       border:1px solid var(--border);
-      border-radius:18px;
-      box-shadow:0 20px 60px rgba(0,0,0,.7);
+      border-radius:16px;
+      width:min(900px, 100%);
       padding:16px;
+      box-shadow:var(--shadow);
     }
     .modalTop{
       display:flex;
-      gap:12px;
       align-items:center;
       justify-content:space-between;
-      margin-bottom:10px;
+      gap:12px;
     }
     .modalTitle{
-      color:var(--gold);
-      font-weight:900;
-      font-size:18px;
       margin:0;
+      font-size:18px;
+      color:var(--gold);
     }
     .modalBody{
+      margin-top:12px;
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
-      min-width:0;
-    }
-    @media (max-width:760px){
-      .modalBody{ grid-template-columns:1fr; }
-    }
-    textarea{
-      width:100%;
-      min-height:260px;
-      resize:vertical;
-      border-radius:14px;
-      border:1px solid #2d2d2d;
-      background:#141414;
-      color:var(--text);
-      padding:12px;
-      outline:none;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      font-size:12px;
-      line-height:1.35;
     }
     .preview{
       border-radius:14px;
       border:1px solid #2d2d2d;
       background:#141414;
       padding:12px;
-      min-height:260px;
+      min-height:240px;
       overflow:auto;
       font-size:12px;
       color:var(--text);
@@ -438,38 +337,29 @@
       font-size:12px;
     }
 
-    /* Small “flash” for search */
     tr.flash td{ outline:2px solid rgba(255,196,0,.55); outline-offset:-2px; }
+
+    @media (max-width: 1100px){
+      .mainGrid{ grid-template-columns:1fr; }
+      table{ min-width:640px; }
+    }
+
+    @media (max-width: 560px){
+      .row{ grid-template-columns:1fr; }
+      .btnGrid2{ grid-template-columns:1fr; }
+      .statsGrid{ grid-template-columns:1fr; }
+      .modalBody{ grid-template-columns:1fr; }
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div class="topbar">
-      <div class="brand">
-        <div class="mascotWrap" title="All In Capone Club">
-          <img src="./assets/mascot.png" alt="Mascot" onerror="this.style.display='none'; this.parentElement.textContent='🎩'; this.parentElement.style.color='#FFC400'; this.parentElement.style.fontSize='24px';" />
-        </div>
-        <div class="brandText">
-          <div class="clubName">All In Capone Club</div>
-          <div class="clubSub">Внутренний инструмент администратора</div>
-        </div>
-      </div>
-
-      <div class="headerRight">
-        <h1>Посадка, re-entry и учёт турнира</h1>
-        <p class="sub">Тап по строке меняет статус. В таблице входов: «— → стек выдан → оплачено → —». В таблице игроков: «— → пришёл → оплачено → —».</p>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
     <main class="mainGrid">
-      <!-- LEFT -->
+      <!-- LEFT COLUMN -->
       <section class="leftCol">
         <div class="card">
-          <h2 class="cardTitle">Настройки и игроки</h2>
-
+          <h2 class="cardTitle">Настройки турнира</h2>
           <div class="row">
             <div class="field">
               <label for="modeSelect">Тип турнира</label>
@@ -479,48 +369,52 @@
                 <option value="bloodhunter">BLOOD HUNTER K.O.</option>
               </select>
             </div>
-
             <div class="field" id="cascadePhaseWrap" style="display:none;">
               <label for="cascadePhaseSelect">Фаза (CASCADE)</label>
               <select id="cascadePhaseSelect">
-                <option value="late">До конца поздней регистрации (+50 за KO)</option>
+                <option value="late">До поздней регистрации (+50 за KO)</option>
                 <option value="after">После поздней регистрации (+100 за KO)</option>
                 <option value="final">Финальный стол (+200 за KO)</option>
               </select>
             </div>
           </div>
-
-          <div class="row" style="margin-top:12px;">
-            <div class="field small">
-              <label for="playerNum">№ игрока</label>
-              <input id="playerNum" type="number" min="1" placeholder="№" />
-            </div>
-            <div class="field">
-              <label for="playerName">Ник / Имя игрока</label>
-              <input id="playerName" type="text" placeholder="Ник / Имя" />
-            </div>
-          </div>
-
-          <div class="btnGrid2">
-            <button class="btn btnPrimary" id="btnAddPlayer">Добавить игрока</button>
-            <button class="btn btnSecondary" id="btnBulkOpen">Загрузить списком</button>
-            <button class="btn btnSecondary" id="btnExportPlayersTxt">Экспорт игроков (.txt)</button>
-            <button class="btn btnSecondary" id="btnImportPlayersTxt">Импорт игроков (.txt)</button>
-          </div>
-          <input type="file" id="fileImportPlayers" accept=".txt" style="display:none;" />
-
           <div class="explain">
             Пул очков = (оплаченные входы + оплаченные re-entry) × <b style="color:var(--gold);">120</b>.<br>
-            Очки за место получают ТОП-18. KO-очки считаются отдельно и не зависят от места.
+            ТОП-18 получает очки за место. KO-очки считаются всегда и не зависят от места.
           </div>
         </div>
 
         <div class="card">
-          <h2 class="cardTitle">Импорт результатов (.txt)</h2>
-          <button class="btn btnSecondary btnWide" id="btnImportResultsTxt">Загрузить TXT</button>
+          <h2 class="cardTitle">Добавление игроков</h2>
+          <div class="row">
+            <div class="field">
+              <label for="playerNum">№ игрока</label>
+              <input id="playerNum" type="number" min="1" placeholder="№" />
+            </div>
+            <div class="field">
+              <label for="playerName">Ник / Имя</label>
+              <input id="playerName" type="text" placeholder="Ник / Имя" />
+            </div>
+          </div>
+          <div class="btnGrid2">
+            <button class="btn btnPrimary" id="btnAddPlayer">Добавить игрока</button>
+            <button class="btn btnSecondary" id="btnBulkOpen">Загрузить списком</button>
+          </div>
+          <div class="hintSmall">При добавлении автоматически создаётся основной entry и запись в таблице входов.</div>
+        </div>
+
+        <div class="card">
+          <h2 class="cardTitle">Импорт / экспорт</h2>
+          <div class="btnGrid2">
+            <button class="btn btnSecondary" id="btnExportPlayersTxt">Экспорт игроков (.txt)</button>
+            <button class="btn btnSecondary" id="btnImportResultsTxt">Импорт результатов (.txt)</button>
+          </div>
+          <div class="btnGrid1">
+            <button class="btn btnSecondary" id="btnExportResultsTxt" disabled>Экспорт результатов (.txt)</button>
+          </div>
           <input type="file" id="fileImportResults" accept=".txt" style="display:none;" />
           <div class="explain">
-            Загружайте TXT, ранее экспортированный из этой же страницы. Результаты восстановятся в таблице игроков.
+            Экспорт результатов доступен после завершения турнира.
           </div>
         </div>
 
@@ -533,11 +427,11 @@
             </div>
             <div class="stat">
               <div class="val" id="statEntries">0</div>
-              <div class="lbl">Входов</div>
+              <div class="lbl">Входов оплачено</div>
             </div>
             <div class="stat">
               <div class="val" id="statRe">0</div>
-              <div class="lbl">Re-entry</div>
+              <div class="lbl">Re-entry оплачено</div>
             </div>
             <div class="stat">
               <div class="val" id="statTotal">0</div>
@@ -550,7 +444,7 @@
         </div>
 
         <div class="card">
-          <h2 class="cardTitle">Поиск игрока</h2>
+          <h2 class="cardTitle">Поиск</h2>
           <div class="row">
             <div class="field">
               <label for="searchInput">Найти по нику или №</label>
@@ -558,10 +452,10 @@
             </div>
             <button class="btn btnSecondary" id="btnSearch">Найти</button>
           </div>
-          <div class="explain">Поиск прокрутит таблицу игроков справа до совпадения.</div>
+          <div class="hintSmall">Поиск прокрутит таблицу игроков справа до совпадения.</div>
         </div>
 
-        <div class="card tableCard entriesTable">
+        <div class="card">
           <h2 class="cardTitle">Входы и Re-entry</h2>
           <div class="tableWrap">
             <table id="entriesTable">
@@ -577,40 +471,42 @@
             </table>
           </div>
           <div class="explain">
-            Тап по строке: <b>— → стек выдан → оплачено → —</b>. В пул очков попадают только <b>оплаченные</b> записи.
+            Тап по строке: <b>— → стек выдан → оплачено → —</b>. В расчётах участвуют только <b>оплаченные</b> записи.
           </div>
         </div>
 
         <div class="card">
-          <h2 class="cardTitle">Подсказка для администраторов</h2>
+          <h2 class="cardTitle">Подсказки администратору</h2>
           <div class="explain" style="border-top:1px dashed rgba(255,196,0,.35); padding-top:12px;">
-            <b style="color:var(--gold);">Как начислить очки рейтинга:</b>
+            <b style="color:var(--gold);">Коротко:</b>
             <ol style="margin:10px 0 10px 18px; padding:0; color:var(--muted);">
-              <li>Отметьте оплаченные входы и re-entry (в таблице «Входы и Re-entry»).</li>
-              <li>Укажите KO у игроков (в таблице справа).</li>
-              <li>Отметьте вылеты кнопкой «АУТ».</li>
-              <li>Убедитесь, что в игре остался <b>1</b> игрок.</li>
-              <li>Нажмите <b>«Завершить турнир и начислить очки»</b>.</li>
+              <li>Тап по строке игрока меняет статус: <b>— → пришёл → оплачено</b> (и синхронит entry).</li>
+              <li>В пул идут только <b>оплаченные</b> входы и re-entry.</li>
+              <li>Re-entry добавляется кнопкой <b>Re-entry +</b> в строке игрока.</li>
+              <li>Вылеты отмечаются кнопкой <b>АУТ</b>; финализация возможна при <b>1</b> живом игроке.</li>
+              <li>KO-очки считаются отдельно от места и начисляются сразу.</li>
+              <li>До финализации очки за место не начисляются, экспорт результатов недоступен.</li>
             </ol>
             <div style="margin-top:10px; padding:10px 12px; border-radius:14px; background:rgba(255,196,0,.08); border:1px solid rgba(255,196,0,.22);">
-              ⚠️ <b style="color:var(--gold);">До нажатия</b> кнопки завершения очки <b>НЕ</b> считаются.
+              ⚠️ Изменения KO/вылетов/оплат/режима сбрасывают финализацию.
             </div>
-            <div style="margin-top:10px;">После завершения используйте: <b>Экспорт результатов (.txt)</b> — для рейтинга и архива.</div>
           </div>
         </div>
       </section>
 
-      <!-- RIGHT -->
+      <!-- RIGHT COLUMN -->
       <section class="rightCol">
         <div class="card">
-          <h2 class="cardTitle">Игроки</h2>
-
+          <h2 class="cardTitle">Кнопки управления турниром</h2>
           <div class="actionsRow">
             <button class="btn btnPrimary" id="btnFinalize">Завершить турнир и начислить очки</button>
-            <button class="btn btnSecondary" id="btnExportResultsTxt" disabled>Экспорт результатов (.txt)</button>
             <button class="btn btnDanger" id="btnReset">Сбросить турнир</button>
           </div>
+          <div class="hintSmall">Кнопка завершения активна только при одном игроке в игре.</div>
+        </div>
 
+        <div class="card">
+          <h2 class="cardTitle">Список игроков</h2>
           <div class="tableWrap">
             <table id="playersTable">
               <thead>
@@ -619,21 +515,20 @@
                   <th>Игрок</th>
                   <th style="width:140px;">Статус</th>
                   <th style="width:110px;">KO</th>
-                  <th style="width:170px;">Итог</th>
-                  <th style="width:320px;">Действия</th>
+                  <th style="width:120px;">Очки KO</th>
+                  <th style="width:140px;">Очки за место</th>
+                  <th style="width:120px;">Итого</th>
+                  <th style="width:360px;">Действия</th>
                 </tr>
               </thead>
               <tbody id="playersTbody"></tbody>
             </table>
           </div>
-
           <div class="explain" style="margin-top:10px;">
             Тап по строке игрока меняет статус: <b>— → пришёл → оплачено → —</b>.
             Клики по кнопкам/KO не меняют статус.
           </div>
         </div>
-
-        <div class="footer">© All In Capone Club · внутренний инструмент</div>
       </section>
     </main>
   </div>
@@ -677,7 +572,7 @@
 
   <script>
     (function(){
-      const LS_KEY = "aicc_tournament_state_static_v2";
+      const LS_KEY = "tournament_state_static_v3";
       const ENTRY_POINTS = 120;
 
       const TOP18_PERCENTS = [
@@ -685,7 +580,6 @@
         2.6, 2.5, 2.4, 2.3, 2.2, 2.1, 2.1, 2.0, 1.9
       ];
 
-      // status: 0 '-', 1 'пришёл/стек выдан', 2 'оплачено'
       const PLAYER_STATUS_LABEL = s => s===2 ? "оплачено" : (s===1 ? "пришёл" : "—");
       const ENTRY_STATUS_LABEL  = s => s===2 ? "оплачено" : (s===1 ? "стек выдан" : "—");
 
@@ -699,11 +593,10 @@
       const btnAddPlayer = document.getElementById("btnAddPlayer");
       const btnBulkOpen = document.getElementById("btnBulkOpen");
       const btnExportPlayersTxt = document.getElementById("btnExportPlayersTxt");
-      const btnImportPlayersTxt = document.getElementById("btnImportPlayersTxt");
-      const fileImportPlayers = document.getElementById("fileImportPlayers");
 
       const btnImportResultsTxt = document.getElementById("btnImportResultsTxt");
       const fileImportResults = document.getElementById("fileImportResults");
+      const btnExportResultsTxt = document.getElementById("btnExportResultsTxt");
 
       const statPool = document.getElementById("statPool");
       const statEntries = document.getElementById("statEntries");
@@ -718,7 +611,6 @@
       const playersTbody = document.getElementById("playersTbody");
 
       const btnFinalize = document.getElementById("btnFinalize");
-      const btnExportResultsTxt = document.getElementById("btnExportResultsTxt");
       const btnReset = document.getElementById("btnReset");
 
       const modalOverlay = document.getElementById("modalOverlay");
@@ -729,14 +621,14 @@
       const bulkPreview = document.getElementById("bulkPreview");
       const chkOverwrite = document.getElementById("chkOverwrite");
 
-      const state = loadState() || newState();
+      const state = normalizeState(loadState());
 
       function newState(){
         return {
-          mode: "standard",          // standard | cascade | bloodhunter
-          cascadePhase: "late",      // late | after | final
-          players: [],               // {num,name,status,ko,outIndex,place,placePoints,koPoints,totalPoints}
-          entries: [],               // {id,num,type:'entry'|'re',status}
+          mode: "standard",
+          cascadePhase: "late",
+          players: [],
+          entries: [],
           outCounter: 0,
           finalized: false
         };
@@ -757,6 +649,34 @@
         }catch(e){ return null; }
       }
 
+      function normalizeState(raw){
+        const base = newState();
+        if(!raw || typeof raw !== "object") return base;
+        const out = { ...base, ...raw };
+        out.players = Array.isArray(raw.players) ? raw.players.map(p=>({
+          num: Number(p.num),
+          name: String(p.name || `Player #${p.num}`),
+          status: Number.isFinite(p.status) ? p.status : 0,
+          ko: Number.isFinite(p.ko) ? p.ko : 0,
+          outIndex: (p.outIndex==null) ? null : Number(p.outIndex),
+          place: (p.place==null) ? null : Number(p.place),
+          placePoints: Number.isFinite(p.placePoints) ? p.placePoints : 0,
+          koPoints: Number.isFinite(p.koPoints) ? p.koPoints : 0,
+          totalPoints: Number.isFinite(p.totalPoints) ? p.totalPoints : 0
+        })) : [];
+        out.entries = Array.isArray(raw.entries) ? raw.entries.map(e=>({
+          id: String(e.id || uid()),
+          num: Number(e.num),
+          type: e.type === "re" ? "re" : "entry",
+          status: Number.isFinite(e.status) ? e.status : 0
+        })) : [];
+        out.outCounter = Number.isFinite(raw.outCounter) ? raw.outCounter : 0;
+        out.finalized = !!raw.finalized;
+        out.mode = raw.mode === "cascade" || raw.mode === "bloodhunter" ? raw.mode : "standard";
+        out.cascadePhase = raw.cascadePhase === "after" || raw.cascadePhase === "final" ? raw.cascadePhase : "late";
+        return out;
+      }
+
       function syncModeUI(){
         modeSelect.value = state.mode;
         cascadePhaseSelect.value = state.cascadePhase;
@@ -765,6 +685,7 @@
 
       modeSelect.addEventListener("change", ()=>{
         state.mode = modeSelect.value;
+        if(state.finalized){ unfinalize(); }
         recomputeAllPoints(true);
         saveState();
         render();
@@ -772,6 +693,7 @@
 
       cascadePhaseSelect.addEventListener("change", ()=>{
         state.cascadePhase = cascadePhaseSelect.value;
+        if(state.finalized){ unfinalize(); }
         recomputeAllPoints(true);
         saveState();
         render();
@@ -875,36 +797,14 @@
         alert(`Готово. Добавлено: ${added}. Обновлено: ${updated}. Пропущено: ${skipped}.`);
       });
 
-      // Export/Import players TXT
+      // Export players TXT
       btnExportPlayersTxt.addEventListener("click", ()=>{
+        const lines=["№ Ник"];
         const sorted=[...state.players].sort((a,b)=>a.num-b.num);
-        const lines=[];
-        lines.push("СПИСОК ИГРОКОВ");
-        lines.push("");
-        lines.push("Формат: № пробел Ник/Имя");
-        lines.push("----------------------------------------");
-        for(const p of sorted) lines.push(`${p.num} ${p.name}`);
-        downloadText(lines.join("\n"), makeFileName("players","txt"));
-      });
-
-      btnImportPlayersTxt.addEventListener("click", ()=>{
-        fileImportPlayers.value="";
-        fileImportPlayers.click();
-      });
-
-      fileImportPlayers.addEventListener("change", async ()=>{
-        const file = fileImportPlayers.files && fileImportPlayers.files[0];
-        if(!file) return;
-        const text = await file.text();
-        const items = parseBulkLines(text);
-        if(items.length===0){ alert("Файл не распознан. Ожидается формат: № Ник"); return; }
-        let added=0, skipped=0;
-        for(const it of items){
-          if(state.players.some(p=>p.num===it.num)) skipped++;
-          else { addPlayer(it.num, it.name); added++; }
+        for(const p of sorted){
+          lines.push(`${p.num} ${p.name}`);
         }
-        saveState(); render();
-        alert(`Импорт завершён. Добавлено: ${added}. Пропущено: ${skipped}.`);
+        downloadText(lines.join("\n"), makeFileName("players","txt"));
       });
 
       // Import results TXT
@@ -920,28 +820,55 @@
         importResultsFromTxt(text);
       });
 
+      // Export results TXT
+      btnExportResultsTxt.addEventListener("click", ()=>{
+        const txt = buildResultsTxt();
+        downloadText(txt, makeFileName("results","txt"));
+      });
+
       function importResultsFromTxt(text){
         const lines = text.split(/\r?\n/);
         const headerIdx = lines.findIndex(l => l.toLowerCase().includes("место") && l.includes("|") && l.toLowerCase().includes("итого"));
         if(headerIdx===-1){
-          alert("Не найден блок таблицы результатов. Нужна строка заголовка: 'МЕСТО | № | ... | ИТОГО'.");
+          alert("Не найден блок таблицы результатов. Нужна строка: 'МЕСТО | НИК | ... | ИТОГО'.");
           return;
         }
+        const headerParts = lines[headerIdx].split("|").map(s=>s.trim().toLowerCase());
+        const isOldFormat = headerParts.includes("№") || headerParts.includes("entry") || headerParts.includes("re");
+        const parseCell = (value)=>{
+          const v=(value||"").trim();
+          if(!v || v==="-" ) return 0;
+          const n=parseInt(v,10);
+          return Number.isFinite(n)?n:0;
+        };
         const rows=[];
         for(let i=headerIdx+1;i<lines.length;i++){
           const line = lines[i].trim();
           if(!line || !line.includes("|")) continue;
           const parts = line.split("|").map(s=>s.trim());
-          if(parts.length<9) continue;
-          const place = parseInt(parts[0],10);
-          const num = parseInt(parts[1],10);
-          const name = parts[2] || `Player #${num}`;
-          const ko = parseInt(parts[5],10) || 0;
-          const koPoints = parseInt(parts[6],10) || 0;
-          const placePoints = parseInt(parts[7],10) || 0;
-          const totalPoints = parseInt(parts[8],10) || 0;
-          if(!place || !num) continue;
-          rows.push({place,num,name,ko,koPoints,placePoints,totalPoints});
+          if(isOldFormat){
+            if(parts.length<9) continue;
+            const place = parseInt(parts[0],10);
+            const num = parseInt(parts[1],10);
+            const name = parts[2] || `Player #${num}`;
+            const ko = parseCell(parts[5]);
+            const koPoints = parseCell(parts[6]);
+            const placePoints = parseCell(parts[7]);
+            const totalPoints = parseCell(parts[8]);
+            if(!place || !num) continue;
+            rows.push({place,num,name,ko,koPoints,placePoints,totalPoints});
+          }else{
+            if(parts.length<6) continue;
+            const place = parseInt(parts[0],10);
+            const name = parts[1];
+            const ko = parseCell(parts[2]);
+            const koPoints = parseCell(parts[3]);
+            const placePoints = parseCell(parts[4]);
+            const totalPoints = parseCell(parts[5]);
+            if(!place) continue;
+            const num = place;
+            rows.push({place,num,name: name || `Player #${num}`,ko,koPoints,placePoints,totalPoints});
+          }
         }
         if(rows.length===0){ alert("Не удалось распознать строки результатов."); return; }
 
@@ -951,7 +878,12 @@
         for(const r of rows){
           addPlayer(r.num, r.name);
           const p = state.players.find(x=>x.num===r.num);
-          p.ko=r.ko; p.koPoints=r.koPoints; p.placePoints=r.placePoints; p.totalPoints=r.totalPoints; p.place=r.place; p.status=2;
+          p.ko=r.ko;
+          p.koPoints=r.koPoints;
+          p.placePoints=r.placePoints;
+          p.totalPoints=r.totalPoints;
+          p.place=r.place;
+          p.status=2;
         }
 
         const others = rows.filter(r=>r.place!==1).sort((a,b)=>a.place-b.place);
@@ -967,7 +899,6 @@
           p.outIndex = null;
         }
 
-        // mark entries paid (simpler)
         for(const e of state.entries) e.status=2;
 
         saveState(); render();
@@ -1004,20 +935,12 @@
 
         entry.status = (entry.status+1)%3;
 
-        // sync player for main entry
         if(entry.type==="entry"){
           const p=state.players.find(p=>p.num===entry.num);
           if(p) p.status = entry.status;
         }
 
-        // if finalized and payment changed -> unfinalize to avoid wrong points
-        if(state.finalized){
-          state.finalized=false;
-          btnExportResultsTxt.disabled=true;
-          for(const p of state.players){
-            p.place=null; p.placePoints=0; p.totalPoints=0;
-          }
-        }
+        if(state.finalized){ unfinalize(); }
 
         recomputeAllPoints(true);
         saveState(); render();
@@ -1034,29 +957,17 @@
 
         p.status=(p.status+1)%3;
 
-        // sync main entry status
         const main=state.entries.find(x=>x.num===p.num && x.type==="entry");
         if(main) main.status=p.status;
 
-        if(state.finalized){
-          state.finalized=false;
-          btnExportResultsTxt.disabled=true;
-          for(const pl of state.players){
-            pl.place=null; pl.placePoints=0; pl.totalPoints=0;
-          }
-        }
+        if(state.finalized){ unfinalize(); }
 
         recomputeAllPoints(true);
         saveState(); render();
       });
 
-      // Finalize / export / reset
+      // Finalize / reset
       btnFinalize.addEventListener("click", finalizeTournament);
-
-      btnExportResultsTxt.addEventListener("click", ()=>{
-        const txt = buildResultsTxt();
-        downloadText(txt, makeFileName("results","txt"));
-      });
 
       btnReset.addEventListener("click", ()=>{
         if(!confirm("Сбросить турнир? Все данные будут удалены.")) return;
@@ -1076,7 +987,6 @@
           const per = (state.cascadePhase==="late") ? 50 : (state.cascadePhase==="after") ? 100 : 200;
           return ko*per;
         }
-        // bloodhunter
         let pts=0;
         for(let i=1;i<=ko;i++){
           if(i===1) pts+=50;
@@ -1101,7 +1011,7 @@
       function finalizeTournament(){
         const alive = state.players.filter(p=>p.outIndex==null);
         if(alive.length!==1){
-          alert("Для завершения турнира должен остаться ровно 1 игрок «в игре». Отметьте вылеты кнопкой «АУТ».");
+          alert("Для завершения турнира должен остаться ровно 1 игрок «в игре». Отметьте вылеты кнопкой «АУТ». ");
           return;
         }
 
@@ -1110,7 +1020,7 @@
 
         const out = state.players
           .filter(p=>p.outIndex!=null)
-          .sort((a,b)=> (b.outIndex-a.outIndex)); // last eliminated first
+          .sort((a,b)=> (b.outIndex-a.outIndex));
 
         winner.place=1;
         let place=2;
@@ -1127,10 +1037,9 @@
 
         recomputeAllPoints(true);
         state.finalized=true;
-        btnExportResultsTxt.disabled=false;
 
         saveState(); render();
-        alert("Турнир завершён. Очки начислены. Можно экспортировать результаты (.txt).");
+        alert("Турнир завершён. Очки начислены. Можно экспортировать результаты (TXT).");
       }
 
       function buildResultsTxt(){
@@ -1138,12 +1047,11 @@
         const paidEntry=countPaid("entry");
         const paidRe=countPaid("re");
         const modeLabel = state.mode==="standard" ? "Обычный" : state.mode==="cascade" ? "CASCADE K.O." : "BLOOD HUNTER K.O.";
-        const phaseLabel = state.cascadePhase==="late" ? "До конца поздней регистрации (+50 за KO)"
+        const phaseLabel = state.cascadePhase==="late" ? "До поздней регистрации (+50 за KO)"
                         : state.cascadePhase==="after" ? "После поздней регистрации (+100 за KO)"
                         : "Финальный стол (+200 за KO)";
 
         const lines=[];
-        lines.push("ALL IN CAPONE CLUB");
         lines.push("РЕЗУЛЬТАТЫ ТУРНИРА");
         lines.push("");
         lines.push(`Тип турнира: ${modeLabel}`);
@@ -1153,24 +1061,14 @@
         lines.push("(оплаченные входы + оплаченные re-entry) × 120");
         lines.push(`(${paidEntry} + ${paidRe}) × 120 = ${pool}`);
         lines.push("");
-        lines.push("----------------------------------------");
-        lines.push("");
-        lines.push("МЕСТО | № | НИК | ENTRY | RE | KO | ОЧКИ KO | ОЧКИ ЗА МЕСТО | ИТОГО");
+        lines.push("МЕСТО | НИК | КО | ОЧКИ КО | ОЧКИ ЗА МЕСТО | ИТОГО");
 
         const rows=[...state.players].filter(p=>p.place!=null).sort((a,b)=>a.place-b.place);
 
         for(const p of rows){
-          const entryAll = state.entries.filter(e=>e.num===p.num && e.type==="entry").length;
-          const reAll = state.entries.filter(e=>e.num===p.num && e.type==="re").length;
-          const entryPaid = state.entries.filter(e=>e.num===p.num && e.type==="entry" && e.status===2).length;
-          const rePaid = state.entries.filter(e=>e.num===p.num && e.type==="re" && e.status===2).length;
-
           lines.push([
             p.place,
-            p.num,
             p.name,
-            `${entryPaid}/${entryAll}`,
-            `${rePaid}/${reAll}`,
             p.ko||0,
             p.koPoints||0,
             p.placePoints||0,
@@ -1183,23 +1081,25 @@
       function render(){
         syncModeUI();
 
-        // stats (IMPORTANT: no 0/0 here)
         const pool = computePoolPoints();
         const entriesAll = countTotal("entry");
         const reAll = countTotal("re");
+        const paidEntry = countPaid("entry");
+        const paidRe = countPaid("re");
 
         statPool.textContent = String(pool);
-        statEntries.textContent = String(entriesAll);
-        statRe.textContent = String(reAll);
+        statEntries.textContent = String(paidEntry);
+        statRe.textContent = String(paidRe);
         statTotal.textContent = String(entriesAll + reAll);
 
         statFormula.textContent =
-          `(оплаченные входы + оплаченные re-entry) × 120 = (${countPaid("entry")} + ${countPaid("re")}) × 120 = ${pool}`;
+          `(оплаченные входы + оплаченные re-entry) × 120 = (${paidEntry} + ${paidRe}) × 120 = ${pool}`;
 
         renderEntries();
         renderPlayers();
 
         btnExportResultsTxt.disabled = !state.finalized;
+        btnFinalize.disabled = (state.players.filter(p=>p.outIndex==null).length !== 1);
 
         saveState();
       }
@@ -1242,10 +1142,15 @@
           const statusText = (p.outIndex!=null) ? "аут" : PLAYER_STATUS_LABEL(p.status);
           const statusClass = (p.outIndex!=null) ? "pillOut" : (p.status===2 ? "pillPaid" : (p.status===1 ? "pillCome" : ""));
 
-          const itogo = state.finalized ? (p.totalPoints||0) : (p.koPoints||0);
-          const breakdown = state.finalized
-            ? `<div style="color:var(--muted);font-size:11px;margin-top:2px;">KO: ${p.koPoints||0} · место: ${p.placePoints||0}${p.place?` · #${p.place}`:""}</div>`
-            : `<div style="color:var(--muted);font-size:11px;margin-top:2px;">KO-очки сейчас · место — после завершения</div>`;
+          const entryAll = state.entries.filter(e=>e.num===p.num && e.type==="entry").length;
+          const reAll = state.entries.filter(e=>e.num===p.num && e.type==="re").length;
+          const entryPaid = state.entries.filter(e=>e.num===p.num && e.type==="entry" && e.status===2).length;
+          const rePaid = state.entries.filter(e=>e.num===p.num && e.type==="re" && e.status===2).length;
+
+          const koPoints = p.koPoints||0;
+          const placePoints = p.placePoints||0;
+          const totalPoints = p.totalPoints||0;
+          const placeBadge = p.place ? `#${p.place}` : "—";
 
           const outBtnLabel = (p.outIndex==null) ? "АУТ" : "Отмена АУТ";
 
@@ -1255,10 +1160,21 @@
             <td><span class="pill ${statusClass}">${statusText}</span></td>
             <td><input class="koInput" type="number" min="0" value="${p.ko||0}" data-ko-num="${p.num}"></td>
             <td>
-              <div style="font-weight:900;color:var(--gold);">${itogo}</div>
-              ${breakdown}
+              <div style="font-weight:900;color:var(--gold);">${koPoints}</div>
+              <div style="color:var(--muted);font-size:11px;margin-top:2px;">KO</div>
             </td>
             <td>
+              <div style="font-weight:900;color:var(--gold);">${placePoints}</div>
+              <div style="color:var(--muted);font-size:11px;margin-top:2px;">Место ${placeBadge}</div>
+            </td>
+            <td>
+              <div style="font-weight:900;color:var(--gold);">${totalPoints}</div>
+              <div style="color:var(--muted);font-size:11px;margin-top:2px;">Итого</div>
+            </td>
+            <td>
+              <div style="color:var(--muted);font-size:11px;margin-bottom:6px;">
+                E ${entryPaid}/${entryAll} · R ${rePaid}/${reAll}
+              </div>
               <div class="miniBtns">
                 <button class="miniBtn" data-action="re" data-num="${p.num}">Re-entry +</button>
                 <button class="miniBtn" data-action="out" data-num="${p.num}">${outBtnLabel}</button>
@@ -1269,7 +1185,6 @@
           playersTbody.appendChild(tr);
         }
 
-        // KO inputs: stop row-tap
         playersTbody.querySelectorAll('input[data-ko-num]').forEach(inp=>{
           inp.addEventListener("click", e=>e.stopPropagation());
           inp.addEventListener("input", e=>{
@@ -1278,12 +1193,12 @@
             const p=state.players.find(x=>x.num===num);
             if(!p) return;
             p.ko = Math.max(0, parseInt(inp.value,10)||0);
+            if(state.finalized){ unfinalize(); }
             recomputeAllPoints(true);
             saveState(); render();
           });
         });
 
-        // Mini buttons
         playersTbody.querySelectorAll('button[data-action]').forEach(btn=>{
           btn.addEventListener("click", (e)=>{
             e.stopPropagation();
@@ -1346,13 +1261,11 @@
           .replaceAll("'","&#039;");
       }
 
-      // init
       syncModeUI();
       recomputeAllPoints(true);
       render();
       saveState();
 
-      // ESC closes modal
       document.addEventListener("keydown", (e)=>{
         if(e.key==="Escape" && modalOverlay.style.display==="flex") openModal(false);
       });
